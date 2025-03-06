@@ -22,7 +22,7 @@ This container for Predictor includes:
 
 ## Usage
 
-We encourage using pre-built containers for this model that are hosted on Zenodo: [[LINK HERE]].
+We encourage using pre-built containers for this model that are hosted on Zenodo: <https://zenodo.org/records/14969579>.
 
 However, if you are building the container using the provided definition file, ensure you have the following directory structure on the host:
 
@@ -102,7 +102,7 @@ apptainer run --nv borzoi_human_predictor.sif HOST PORT
 ## Details
 
 - The container receives data via a TCP socket and does not require mounted data directories.
-- Replace `HOST` and `PORT` with the server and port configuration for the evaluator.
+- Replace `HOST` and `PORT` with the server and port configuration for the evaluator to connect to.
 - The `--nv` flag sets up the environment of the container to use an NVIDIA GPU and CUDA libraries to run a CUDA-enabled application.
 
 ## Purpose

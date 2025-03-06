@@ -6,25 +6,22 @@ To run a test prediction using the Borzoi container and sample Evaluator contain
 
 ```bash
 mkdir BORZOI
-mkdir test_evaluator
+mkdir BORZOI/test_evaluator
 ```
 
 ```bash
 cd BORZOI
-wget [LINK]
-mv borzoi_human_predictor.sif?download=1 borzoi_human_predictor.sif
+wget -O borzoi_human_predictor.sif "https://zenodo.org/records/14969579/files/borzoi_human_predictor.sif?download=1"
 ```
 
 ``` bash
 cd test_evaluator
-wget [LINK]
-mv evaluator.sif?download=1 evaluator.sif
-wget [LINK]
-mv evaluator_data.zip?include_deleted=0 evaluator_data
+wget -O borzoi_evaluator.sif "https://zenodo.org/records/14969579/files/borzoi_evaluator.sif?download=1"
+wget -O evaluator_data.tar.gz "https://zenodo.org/records/14969579/files/evaluator_data.tar.gz?download=1"
 mkdir predictions
 ```
 
-**Note:** if you run into issues downloading the `evaluator_data` folder you may need to manually download it off Zenodo.
+**Note:** if you run into issues downloading the `evaluator_data` folder you may need to manually download it off Zenodo: <https://zenodo.org/records/14969579>.
 
 2. Get the IP Address of where the Predictor is running
 
