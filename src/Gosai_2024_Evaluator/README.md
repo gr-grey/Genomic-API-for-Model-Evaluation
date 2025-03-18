@@ -57,7 +57,7 @@ Gosai_2024_Evaluator/
 
 ### **Structure of the API JSON Format**
 
-## **3. Configuring and Running the API** (Similar to [Basic Instructions for Test Evaluator and Predictor](https://github.com/de-Boer-Lab/Genomic-Model-Evaluation-API/blob/main/src/socket_scripts/Apptainer/Test_Evaluator_Predictor/instructions.md))
+## **3. Configuring and Running the API** (Similar to [Basic Instructions for Test Evaluator and Predictor](https://github.com/de-Boer-Lab/Genomic-API-for-Model-Evaluation/tree/main/src/training_examples/Apptainer/Test_Evaluator_Predictor))
 
 ### 3.1 Configuring the Containers Using Definition Files
 
