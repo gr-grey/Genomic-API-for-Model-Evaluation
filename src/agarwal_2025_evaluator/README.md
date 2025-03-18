@@ -1,4 +1,4 @@
-# # Configuring Definition File and Running Evaluator Container for Agarwal et al. 2025
+# Configuring Definition File and Running Evaluator Container for Agarwal et al. 2025
 
 For details regarding:
 
