@@ -169,7 +169,7 @@ The wrapper allows for predictions to be made by the model when the `predict_dre
 
 ---
 
-## **3. Configuring and Running the API** (Similar to [Basic Instructions for Test Evaluator and Predictor](https://github.com/de-Boer-Lab/Genomic-API-for-Model-Evaluation/blob/main/src/training_examples/Apptainer/Test_Evaluator_Predictor/instructions.md))
+## **3. Configuring and Running the API** (Similar to [Basic Instructions for Test Evaluator and Predictor](https://github.com/de-Boer-Lab/Genomic-API-for-Model-Evaluation/tree/main/src/training_examples/Apptainer/Test_Evaluator_Predictor))
 
 ### 3.1 Configuring the Containers Using Definition Files
 
