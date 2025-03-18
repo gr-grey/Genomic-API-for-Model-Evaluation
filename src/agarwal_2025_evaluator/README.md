@@ -14,9 +14,9 @@ please checkout this [documentation](https://github.com/de-Boer-Lab/Genomic-API-
 
 This container includes:
 
-    - Evaluator API script for genomic sequence evaluation.
-    - Evaluator helper script for error checking functions.
-    - Installed Python dependencies required by the Evaluator.
+- Evaluator API script for genomic sequence evaluation.
+- Evaluator helper script for error checking functions.
+- Installed Python dependencies required by the Evaluator.
 
 This container is the Evaluator configured for the Genomic API, designed specifically to evaluate model predictions against the Agarwal et al. (2025) Joint Library dataset. The dataset consists of approximately 60,000 candidate cis-regulatory elements (cCREs), including enhancers and promoters systematically tested across HepG2, K562, and WTC11 cell lines, along with positive and negative control sequences. Each element is represented by a 230-bp oligonucleotide, enabling standardized model benchmarking.
 
