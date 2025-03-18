@@ -1,6 +1,6 @@
-### Basic instructions to create a test Evaluator and Predictor
+# Basic instructions to create a test Evaluator and Predictor
 
-### Creating an Evaluator that reads in some sample JSON files that include DNA sequences
+## Creating an Evaluator that reads in some sample JSON files that include DNA sequences
 
 Make sure that you have Apptainer installed. Additional details and installation instructions can be found here: https://apptainer.org/docs/user/main/quick_start.html
 
