@@ -1,4 +1,4 @@
-# Configuring Definition File and Running Evaluator Container for Agarwal et al. 2025
+# Configuring Definition File and Running Evaluator Container for Agarwal et al. (2025)
 
 For details regarding:
 
@@ -8,7 +8,7 @@ For details regarding:
     - Configuring containers using definition files
     - Purpose of definition files
     - Why containers are used and to learn more about them
-please checkout this [documentation](https://github.com/de-Boer-Lab/Genomic-API-for-Model-Evaluation/tree/main/src/DREAM_RNN)
+please checkout this [documentation](https://github.com/de-Boer-Lab/Genomic-API-for-Model-Evaluation/tree/main/src/DREAM_RNN).
 
 ## Overview
 
