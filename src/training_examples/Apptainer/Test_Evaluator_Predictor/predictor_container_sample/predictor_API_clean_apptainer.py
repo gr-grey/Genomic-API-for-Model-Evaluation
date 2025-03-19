@@ -1,14 +1,10 @@
 #Oct 30th, 2024
 import socket
 import json
-import random
-import base64
 import sys
-import os
 import struct
 from error_message_functions_updated import *
 from deBoerTest_model import *
-import argparse
 
 
 def run_predictor():
