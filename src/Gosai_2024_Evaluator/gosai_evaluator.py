@@ -9,8 +9,9 @@ from collections import Counter
 import pandas as pd
 import tqdm
 
-# Get the current working directory
-CWD = os.getcwd()
+# Get the absolute path of the script's directory
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def create_json(input_data):
 
     """
@@ -43,9 +44,10 @@ def create_json(input_data):
 input_txt = "41586_2024_8070_MOESM4_ESM.txt"
 
 #Determine if running inside a container or not
-if os.path.exists("/evaluator_data"):
+if os.path.exists("/.singularity.d"):
     # Running inside the container
-    EVALUATOR_INPUT_PATH = os.path.join("/evaluator_data", input_txt)
+    EVALUATOR_DATA_DIR = "/evaluator_data"
+    PREDICTIONS_DIR = "/predictions"
 
 else:
     #Running outside the container

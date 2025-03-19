@@ -275,9 +275,7 @@ Once the definition files for the Evaluator and Predictor APIs are configured, t
     - For the Evaluator container:
 
         ```bash
-        mkdir -p /evaluator_data
-        mkdir -p /predictions
-        chmod -R 755 /evaluator_data /predictions /evaluator_container_apptainer
+        chmod -R 755 /evaluator_container_apptainer
         ```
 
     - These directories are used for runtime-mounted data handling and must be accessible to ensure seamless input/output operations.
@@ -352,8 +350,8 @@ Once the definition files for the Evaluator and Predictor APIs are configured, t
 **Why Runtime Mounting?**:
 
 - Runtime mounting (-B) ensures flexibility:
-  - The **Evaluator container** mounts directories like /evaluator_data and /predictions to read input and write output without requiring files to be embedded inside the container.
-  - The **Predictor container**, by contrast, does not need mounting for this container since all necessary files (e.g., model weights, helper scripts) are already copied into the container. In some cases you may want to use files that are not copied into the container at run time and these can be placed in the /predictor_data folder.
+  - The **Evaluator container** mounts directories like /evaluator_data and /predictions to read input and write output without requiring files to be embedded/copied/created inside the container.
+  - The **Predictor container**, by contrast, does not need mounting for this container since all necessary files (e.g., model weights, helper scripts) are already copied into the container. In some cases you may want to use files that are not copied into the container at run time and these can be placed in the `/predictor_data` folder.
 
 ---
 
