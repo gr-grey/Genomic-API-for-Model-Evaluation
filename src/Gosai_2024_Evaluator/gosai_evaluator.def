@@ -4,6 +4,7 @@ Stage: build
 
 %files
     gosai_evaluator.py /Gosai_2024_Evaluator/gosai_evaluator.py
+    evaluator_utils.py /evaluator_script_and_utils/evaluator_utils.py
 
 %environment
     # Prevent automatic binding of host directories
@@ -55,7 +56,8 @@ Stage: build
     ├── gosai_evaluator.py
     ├── evaluator_data
     │   └── 41586_2024_8070_MOESM4_ESM.txt
-    └── predictions
+    ├── evaluator_utils.py
+    └── predictions/
     ```
 
     Prepare directories on the host system for data and predictions:
