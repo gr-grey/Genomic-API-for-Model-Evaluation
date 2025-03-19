@@ -19,52 +19,38 @@ input_file = "2023-03-03628C-Table_S10-joint_lib_design.xlsx"
 if os.path.exists("/.singularity.d"):
     # Running inside the container
     EVALUATOR_DATA_DIR = "/evaluator_data/2023-03-03628-s5"
-    PREDICTIONS_DIR = "/predictions"
 else:
     # Running outside the container
-    EVALUATOR_SCRIPT_DIR = SCRIPT_DIR
-    EVALUATOR_DATA_DIR = os.path.join(EVALUATOR_SCRIPT_DIR, "evaluator_data", "2023-03-03628-s5")
-    PREDICTIONS_DIR = os.path.join(EVALUATOR_SCRIPT_DIR, "predictions")
+    EVALUATOR_DATA_DIR = os.path.join(SCRIPT_DIR, "evaluator_data", "2023-03-03628-s5")
     
 EVALUATOR_INPUT_PATH = os.path.join(EVALUATOR_DATA_DIR, input_file)
 
 output_json_filename = f'agarwal_joint_lib_predictions_{input_file.replace(".xlsx", "")}.json'
-RETURN_FILE_PATH = os.path.join(PREDICTIONS_DIR, output_json_filename)
-
-# Validate input file path
-if not os.path.exists(EVALUATOR_INPUT_PATH):
-    print(f"Error: Input file '{EVALUATOR_INPUT_PATH}' does not exist.")
-    sys.exit(1)
-
-# Validate output directory
-output_dir = os.path.dirname(RETURN_FILE_PATH)
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir, exist_ok=True)
-    print(f"Output directory '{output_dir}' did not exist. Created it successfully!")
-    # sys.exit(1)
     
 # Set buffer size for TCP
 BUFFER_SIZE = 65536
 
 # Debug logs for validation
 print(f"Using input file: {EVALUATOR_INPUT_PATH}")
-print(f"Will save predictions to: {RETURN_FILE_PATH}")
-
 
 def run_evaluator():
     host = sys.argv[1]
     port = int(sys.argv[2])
     output_dir = sys.argv[3]
     
-    # Validate input JSON file
+    # Validate evaluator input file exists
     if not os.path.exists(EVALUATOR_INPUT_PATH):
         print(f"Error: Evaluator input file '{EVALUATOR_INPUT_PATH}' does not exist.")
         sys.exit(1)
 
-    # Validate output directory
+    # Validate output directory; create if it does not
     if not os.path.exists(output_dir):
-        print(f"Error: Output directory '{output_dir}' does not exist.")
-        sys.exit(1)
+        os.makedirs(output_dir, exist_ok=True)
+        print(f"Output directory '{output_dir}' did not exist. Created it successfully!")
+    
+    # Compute the full RETURN_FILE_PATH using the provided output directory
+    RETURN_FILE_PATH = os.path.join(output_dir, output_json_filename)
+    print(f"Will save predictions to: {RETURN_FILE_PATH}")
         
     # Try creating a socket
     try:
