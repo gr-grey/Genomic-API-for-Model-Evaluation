@@ -21,7 +21,7 @@ Stage: build
 
     echo "Installing Python dependencies..."
     python -m pip install --upgrade pip
-    pip3 install --no-cache-dir numpy pandas
+    pip3 install --no-cache-dir numpy pandas tqdm
 %runscript
     exec python3 /predictor_container_sample/predictor_API_clean_apptainer.py "$@"
 
