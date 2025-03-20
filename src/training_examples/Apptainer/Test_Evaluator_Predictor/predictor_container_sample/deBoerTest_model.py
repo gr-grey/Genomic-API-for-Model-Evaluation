@@ -21,6 +21,14 @@ def check_seqs_specifications(sequences, json_return_error_model):
                 )
     return(json_return_error_model)
 
+def fake_model_point(sequences, json_dict):
+    predictions = {}
+    # Use tqdm to show progress as we process each sequence.
+    for sequence in tqdm.tqdm(sequences, desc="Processing sequences (point prediction)", unit="seq"):
+        predictions[sequence] = random.randint(0, 1)
+    json_dict['predictions'] = predictions
+    return json_dict
+
 def fake_model_track(sequences, json_dict):
     predictions = {}
     # Iterate over sequences with a progress bar.
