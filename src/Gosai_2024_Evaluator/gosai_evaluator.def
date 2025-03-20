@@ -4,13 +4,14 @@ Stage: build
 
 %files
     gosai_evaluator.py /Gosai_2024_Evaluator/gosai_evaluator.py
-    evaluator_utils.py /evaluator_script_and_utils/evaluator_utils.py
+    evaluator_utils.py /Gosai_2024_Evaluator/evaluator_utils.py
 
 %environment
     # Prevent automatic binding of host directories
     export APPTAINER_NO_MOUNT="home,tmp,proc,sys,dev"
     export LC_ALL=C
     export PATH="/usr/local/bin:$PATH"
+    export PYTHONPATH="/Gosai_2024_Evaluator:$PYTHONPATH"
 
 %post
     echo "Installing system dependencies..."
@@ -23,6 +24,7 @@ Stage: build
     pip3 install --no-cache-dir numpy pandas tqdm
 
     #echo "Setting permissions for directories and script..."
+    echo "Setting permissions for directories and script..."
     chmod -R 755 /Gosai_2024_Evaluator
 
 %runscript
