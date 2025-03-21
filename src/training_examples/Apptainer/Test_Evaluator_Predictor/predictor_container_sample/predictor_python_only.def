@@ -17,7 +17,7 @@ Stage: build
 %post
     # Set permissions for copied files
     echo "Setting permissions..."
-    chmod 755 /predictor_container_sample
+    chmod -R 755 /predictor_container_sample
 
     echo "Installing Python dependencies..."
     python -m pip install --upgrade pip
