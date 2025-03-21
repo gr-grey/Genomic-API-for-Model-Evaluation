@@ -69,6 +69,7 @@ def run_predictor():
                     print("Connection closed unexpectedly.")
                     break
                 json_data_recv += packet
+                progress.update(len(packet))
                 #print(f"Received packet of {len(packet)} bytes, total received: {len(data)} bytes")
                 
             # Close the progress bar when done
