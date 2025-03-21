@@ -32,7 +32,7 @@ Examples of containerized evaluators and predictors can be found in `/src` folde
 | Evaluator     | Zenodo Download link|Description |
 | ----------- | ----------- | ----------- |
 | Gosai MPRA - Genomic     |<https://zenodo.org/records/14920112>       |  Gosai et al. (2024), <https://doi.org/10.1038/s41586-024-08070-z> : 776,474 genomic sequences (200bp), measured in K562 (erythroid precursors), HepG2 (hepatocytes) and SK-N-SH (neuroblastoma) |
-| Agarwal Joint Library     |<https://zenodo.org/records/15042469>       |  Agarwal et al. (2025), <https://doi.org/10.1038/s41586-024-08430-9> : 60,000 candidate cis-regulatory elements (cCREs), including enhancers and promoters systematically tested across HepG2, K562, and WTC11 cell lines, along with positive and negative control sequences. Each element is represented by a 230-bp oligonucleotide. |
+| Agarwal Joint Library     |<https://zenodo.org/records/15061469>       |  Agarwal et al. (2025), <https://doi.org/10.1038/s41586-024-08430-9> : 60,000 candidate cis-regulatory elements (cCREs), including enhancers and promoters systematically tested across HepG2, K562, and WTC11 cell lines, along with positive and negative control sequences. Each element is represented by a 230-bp oligonucleotide. |
 
 | Predictor     | Zenodo Download link | Description|
 | ----------- | ----------- | ----------- |
