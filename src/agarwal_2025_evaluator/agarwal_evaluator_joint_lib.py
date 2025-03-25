@@ -2,6 +2,7 @@
 import os
 import sys
 import json
+import time
 import tqdm
 import struct
 import socket
@@ -59,17 +60,32 @@ def run_evaluator():
     except socket.error as e:
         print ("server_error: Error creating socket: %s" % e)
         sys.exit(1)
-
-    try:
-        # establish connection with predictor server
-        connection.connect((host, port))
-        print(f"Connected to Predictor on {host}:{port}")
-    except socket.gaierror as e:
-        print ("Address-related error connecting to server: %s" % e)
-        sys.exit(1)
-    except socket.error as e:
-        print ("server_error: Connection error: %s" % e)
-        sys.exit(1)
+        
+    # Re-try Parameters
+    RETRY_INTERVAL = 300 # 300 seconds (5 mins)
+    MAX_RETRIES = 5
+    attempt = 0
+    connected = False
+    
+    while attempt < MAX_RETRIES and not connected:
+        try:
+            # establish connection with predictor server
+            connection.connect((host, port))
+            print(f"Connected to Predictor on {host}:{port}")
+            connected = True
+        except socket.gaierror as e:
+            print ("Address-related error connecting to server: %s" % e)
+            sys.exit(1)
+        except socket.error as e:
+            attempt += 1
+            print ("server_error: Connection error: %s" % e)
+            if attempt < MAX_RETRIES:
+                print(f"Retrying in {RETRY_INTERVAL/60:.0f} minutes... (Attempt {attempt} of {MAX_RETRIES})")
+                for _ in tqdm.tqdm(range(RETRY_INTERVAL), desc="Waiting to retry connection", unit="s"):
+                    time.sleep(1)
+            else:
+                print(f"Tried connecting {attempt} times. Exceeded maximum number of retries. Exiting...")
+                sys.exit(1)
 
     try:
         # Load in JSON file from evalutor_data if connection to Predictor container was successful
