@@ -62,7 +62,7 @@ def run_evaluator():
         print ("server_error: Error creating socket: %s" % e)
         sys.exit(1)
 
-      # Re-try Parameters
+    # Re-try Parameters
     RETRY_INTERVAL = 300 # 300 seconds (5 mins)
     MAX_RETRIES = 5
     attempt = 0
