@@ -1,6 +1,6 @@
-# Evaluator-Predictor Testing Script
+# Evaluator Testing Script Using Dummy Predictor Container
 
-This repository contains a shell script (`test_evaluator_container.sh`) that automates the testing process for new Evaluator containers against a (dummy) Predictor container for the (dummy) deBoerTest_model.
+This repository contains a shell script (`test_evaluator_container.sh`) that automates the testing process for new Evaluator containers against a (dummy) Predictor container for the (dummy) deBoerTest_model. You can also choose to test against a different test Predictor container of your choice: just adjust the path in the shell script, as needed.
 
 ## Features
 
