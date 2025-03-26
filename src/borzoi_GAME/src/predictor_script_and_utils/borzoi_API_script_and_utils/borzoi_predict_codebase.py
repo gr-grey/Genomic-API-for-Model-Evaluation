@@ -156,7 +156,7 @@ def predict_borzoi(sequences, request_tasks, is_point_readout=False):
     
     # Check if any request is an all_tracks request
     if any(rt.lower() == "all_tracks" for rt, _ in request_tasks):
-        print(f"Unique required track indices for all tasks: {len(unique_track_indices)} tracks.")
+        print(f"Unique required track indices for all tasks: ALL {len(unique_track_indices)} tracks.")
     else:
         print(f"Unique required track indices for all tasks: {unique_track_indices}")
     
