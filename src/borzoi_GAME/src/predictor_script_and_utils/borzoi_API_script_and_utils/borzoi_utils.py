@@ -15,8 +15,8 @@ def filter_evaluator_request(simplified_targets_df, request_type, cell_type, mol
             - "accessibility": Uses ATAC and DNASE (concatenated)
             - "expression", "expression_mrna", "expression_pol1", "expression_pol3": Uses RNA
             - "expression_pol2": Uses CAGE (with RNA fallback)
-            - "binding_{molecule}": Uses CHIP assay with specified molecule
-            - "all_tracks": Return all available tracks (for benchmarking).
+            - "binding_{molecule}": Uses CHIP assay with specified molecule.
+            - ("all_tracks": Return all available tracks. Overrides the provided cell type.)
         cell_type (str): Requested cell type for prediction.
         molecule (str, optional): TF binding/ histone modification molecule for ChIP-Seq requests.
         
@@ -34,7 +34,7 @@ def filter_evaluator_request(simplified_targets_df, request_type, cell_type, mol
     request_type = request_type.lower() if request_type else None
     cell_type = cell_type.lower() if cell_type else None
     
-    # Special case: if request_type is "all_tracks", return all available tracks
+    # Special case: if request_type is "all_tracks", return all available tracks, no matter the cell type
     if request_type == "all_tracks":
         print("All tracks request detected: returning all available tracks for prediction.")
         return simplified_targets_df
