@@ -36,8 +36,8 @@ BUFFER_SIZE = 65536
 
 
 def recv_message_loop(client_socket):
-    # Step 1: receive total bytes the Predictor expects to receive
-    # Step 2: receive file from evaluator
+    # Step 1: Receive total bytes (length) of the Evaluator's request 
+    # Step 2: Receive file from Evaluator
 
     # ---------------------- Receive Evaluator JSON ----------------------
     while True:
