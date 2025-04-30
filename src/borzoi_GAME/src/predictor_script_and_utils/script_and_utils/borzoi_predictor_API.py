@@ -34,7 +34,6 @@ from borzoi_predict_codebase import *
 # Set buffer size for TCP
 BUFFER_SIZE = 65536
 
-
 def recv_message_loop(client_socket):
     # Step 1: Receive total bytes (length) of the Evaluator's request 
     # Step 2: Receive file from Evaluator
@@ -273,6 +272,26 @@ def recv_message_loop(client_socket):
         # Then run Borzoi Model ONCE for all required tracks
         print("Running Borzoi model on collected tasks...")
         task_predictions = predict_borzoi(sequences, request_tasks, is_point_readout)
+        
+        # --- ADDITION: Early bail-out if model returns error ---
+        # Send the error to client and close this client
+        if isinstance(task_predictions, str):
+            # Wrap the error string into error payload 
+            json_return_error_model[
+                'prediction_request_failed'].append(task_predictions)
+            json_string = json.dumps(json_return_error_model)
+            try:
+                json_bytes = json_string.encode("utf-8")
+                total_bytes = len(json_bytes)
+                client_socket.sendall(struct.pack('>I', total_bytes))
+                client_socket.sendall(json_bytes)
+                print("Sent prediction error back; closing connection with this Evaluator")
+                continue
+            except socket.error as e:
+                print("server_error: Error sending error response: %s" % e)
+                client_socket.close()
+                print("Connection to client closed")
+                break
 
         # Now format predictions to API JSON structure
         # Create JSON to return

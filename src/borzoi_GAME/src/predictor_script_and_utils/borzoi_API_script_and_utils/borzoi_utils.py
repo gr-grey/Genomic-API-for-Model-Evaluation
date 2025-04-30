@@ -16,15 +16,15 @@ def filter_evaluator_request(simplified_targets_df, request_type, cell_type, mol
             - "expression", "expression_mrna", "expression_pol1", "expression_pol3": Uses RNA
             - "expression_pol2": Uses CAGE (with RNA fallback)
             - "binding_{molecule}": Uses CHIP assay with specified molecule.
-            - ("all_tracks": Return all available tracks. Overrides the provided cell type.)
+            - (HIDDEN VALUE FOR KEY type: "all_tracks": Return all available tracks. 
+               Overrides the provided cell type.)
         cell_type (str): Requested cell type for prediction.
         molecule (str, optional): TF binding/ histone modification molecule for ChIP-Seq requests.
         
     Returns:
         DataFrame: Filtered tracks from simplified_targets_df or an error message string if no tracks are found.
     """
-    request_error_msg = f"Request Error: No requested tracks in the requested type {request_type}\
-                        \n and cell type {cell_type} found."
+    request_error_msg = f"Request Error: No requested tracks in the requested type: {request_type} and cell type: {cell_type} found."
     
     print(f"Received evaluator request from Predictor to filter desired tracks\
            \n Type Requested: {request_type},\

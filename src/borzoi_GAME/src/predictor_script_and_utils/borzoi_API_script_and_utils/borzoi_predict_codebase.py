@@ -124,12 +124,21 @@ def predict_borzoi(sequences, request_tasks, is_point_readout=False):
                                  # ensuring we only process relevant tracks once!
     # Example: [1, 2, 3]
     
+    # --- ADDITION: Early bail-out on no-matches ---
+
     for request_type, cell_type in request_tasks:
         print(f"Performing track selection for {request_type} and {cell_type}...")
         # Get track indices of desired tracks for filtering predictions
         targets_df, simplified_targets_df = load_targets()
         filtered_tracks = filter_evaluator_request(simplified_targets_df,
                                                 request_type, cell_type)
+        
+        # NEW: if filtered_tracks returns a string, it is an error message -- bail-out!
+        if isinstance(filtered_tracks, str):
+            # Just return the error as a string
+            return filtered_tracks
+            
+        # Otherwise, proceed as before -- knowing filtered_tracks is a DataFrame
         track_indices = filtered_tracks.index.tolist()
     
         if not track_indices:
@@ -140,6 +149,7 @@ def predict_borzoi(sequences, request_tasks, is_point_readout=False):
             print(f"Using all {len(track_indices)} track indices for ({request_type}, {cell_type}).")
         else:
             print(f"Using Track Indices for ({request_type}, {cell_type}): {track_indices}")
+        
         task_to_indices[(request_type, cell_type)] = track_indices
         
         for index in track_indices:
@@ -152,7 +162,7 @@ def predict_borzoi(sequences, request_tasks, is_point_readout=False):
     
     if not unique_track_indices:
         print("No valid track indices found for any tasks.")
-        return {}
+        return "No valid track indices could be found for any task."
     
     # Check if any request is an all_tracks request
     if any(rt.lower() == "all_tracks" for rt, _ in request_tasks):
