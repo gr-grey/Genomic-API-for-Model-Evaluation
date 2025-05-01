@@ -15,10 +15,12 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Determine if running inside a container or not
 if os.path.exists('/.singularity.d'):
     # Running inside the container
+    print("Running inside the container...🥡")
     DREAM_DIR = "/dreamRNN_API_script"
     HELP_FILE = "/predictor_container_apptainer/predictor_help_message.json"
 else:
     # Running outside the container
+    print("Running outside the container...📋")
     PREDICTOR_CONTAINER_DIR = os.path.dirname(SCRIPT_DIR)
     DREAM_DIR = os.path.join(PREDICTOR_CONTAINER_DIR, "dreamRNN_API_script")
     HELP_FILE = os.path.join(SCRIPT_DIR, 'predictor_help_message.json')
