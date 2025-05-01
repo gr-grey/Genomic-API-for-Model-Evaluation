@@ -31,9 +31,11 @@ def pad_sequence(seq, target_length):
     # pad with Ns until it is target_length and then add the adapters.
     if seq_len < target_length:
         total_padding = target_length - seq_len
-        right_padding = 'N' * (total_padding // 2)
-        left_padding = 'N' * (total_padding - len(right_padding))
-        padded_seq = left_padding + seq + right_padding
+        # right_padding = 'N' * (total_padding // 2)
+        # left_padding = 'N' * (total_padding - len(right_padding))
+        # Only pad to the left of the sequence
+        pad = 'N' * total_padding
+        padded_seq = pad + seq
         return padded_seq
     
     # When the sequence length, excluding adapters, is the target_length,
@@ -41,10 +43,10 @@ def pad_sequence(seq, target_length):
     elif seq_len == target_length:
         return seq
     
-    # The condition for when sequence length is greater than the target length  
+    # TODO: The condition for when sequence length is greater than the target length  
     # (not including adapter sequences on each side), is a work in progress.
     else:
-        truncated_seq =  seq[:target_length] # For now, just truncate [Work in progress]
+        truncated_seq =  seq[:target_length] # For now, just truncate [WIP: Work in progress]
         return truncated_seq
     
 def add_adapters(seq, upstream_adapter, downstream_adapter):
