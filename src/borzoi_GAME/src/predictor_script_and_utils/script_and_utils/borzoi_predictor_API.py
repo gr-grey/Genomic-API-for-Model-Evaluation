@@ -231,7 +231,7 @@ def recv_message_loop(client_socket):
             ):
                 flanked = f"{upstream_seq}{sequence}{downstream_seq}"
                 sequences[seq_id] = flanked
-        
+                   
         # Can add any additional error checking functions here
         json_return_error_model = {'prediction_request_failed': []}
         json_return_error_model = check_seqs_specifications(sequences, json_return_error_model)
