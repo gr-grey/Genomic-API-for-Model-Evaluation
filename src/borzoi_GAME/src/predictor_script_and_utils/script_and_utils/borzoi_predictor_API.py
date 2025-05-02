@@ -211,6 +211,27 @@ def recv_message_loop(client_socket):
         # Check that the sequences meet model specifications
         # Otherwise do any other formatting required for the model
         sequences = evaluator_json['sequences']
+        
+        # --- Add upstream and downstream flanking sequences, if provided by the evaluator ---
+        # Default to empty string if not provided
+        upstream_seq = evaluator_json.get('upstream_seq', "")
+        downstream_seq = evaluator_json.get('downstream_seq', "")
+        if upstream_seq or downstream_seq:
+            print(
+                f"Applying flanking:\
+                    \n+{len(upstream_seq)} bases upstream,\
+                    \n+{len(downstream_seq)} bases downstream"
+                    )
+            for seq_id, sequence in tqdm.tqdm(
+                sequences.items(),
+                desc="Flanking sequences", 
+                unit="sequence",
+                total=len(sequences),
+                dynamic_ncols=True
+            ):
+                flanked = f"{upstream_seq}{sequence}{downstream_seq}"
+                sequences[seq_id] = flanked
+        
         # Can add any additional error checking functions here
         json_return_error_model = {'prediction_request_failed': []}
         json_return_error_model = check_seqs_specifications(sequences, json_return_error_model)
