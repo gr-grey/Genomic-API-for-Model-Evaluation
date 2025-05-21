@@ -1,0 +1,17 @@
+{
+  "request": "predict",
+  "readout": "point",
+  "prediction_tasks": [
+    {
+      "name": "orca",
+      "type": "expression",
+      "cell_type": "K562",
+      "scale": "linear",
+      "species": "homo_sapiens"
+    }
+  ],
+  "sequences":{
+      "seq1": ["chr9", 110400000],
+      "seq2": ["chr2", 221496000]
+    }
+}

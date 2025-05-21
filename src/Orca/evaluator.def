@@ -1,0 +1,131 @@
+Bootstrap: docker
+From: python:3.13-slim
+Stage: build
+
+%files
+    evaluator_API_clean_apptainer.py /evaluator_container_apptainer/evaluator_API_clean_apptainer.py
+
+%environment
+    # Prevent automatic binding of host directories
+    export APPTAINER_NO_MOUNT="home,tmp,proc,sys,dev"
+    export LC_ALL=C
+    export PATH="/opt/conda/envs/orca_env/bin:$PATH"
+    export LD_LIBRARY_PATH="/opt/conda/envs/orca_env/lib:$LD_LIBRARY_PATH"
+    # seqstr env variable to get sequence
+    export GENOME_PATH='/orca/resources/'
+
+%post
+    #!/bin/bash
+    echo "Installing system dependencies..."
+    apt-get update && \
+    apt-get install -y --no-install-recommends git wget bzip2 ca-certificates && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+    echo "Installing Miniconda..."
+    mkdir -p /opt && \
+    wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p /opt/conda && \
+    rm -rf /tmp/miniconda.sh
+
+    # echo "Installing mamba..."
+    export PATH="/opt/conda/bin:$PATH"
+    conda install -y -n base -c conda-forge mamba
+    . /opt/conda/etc/profile.d/mamba.sh
+
+    echo "Getting orca repo..."
+    cd /
+    git clone https://github.com/jzhoulab/orca.git
+    cd orca
+
+    echo "Creating Conda environment 'orca_env'..."
+    # conda clean --all --yes
+    mamba env create -f orca_env_part1.yml -y
+    mamba activate orca_env
+
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+    mamba env update -f orca_env_part2.yml -y
+
+    git clone https://github.com/kathyxchen/selene.git
+    cd selene
+    git checkout custom_target_support
+    python setup.py build_ext --inplace
+    python setup.py install 
+
+    echo "Verifying Conda environment creation..."
+    if ! conda env list | grep -q orca_env; then
+        echo "Error: Conda environment 'orca' was not created successfully."
+        exit 1
+    fi
+
+    echo "getting target values and hg38 reference genome"
+    cd /orca
+    wget https://zenodo.org/record/6234936/files/resources_core.tar.gz
+    tar -xf resources_core.tar.gz --no-same-owner
+    rm resources_core.tar.gz
+    # target files, around 34G
+    wget https://zenodo.org/record/6234936/files/resources_mcools.tar.gz 
+    tar -xf resources_mcools.tar.gz --no-same-owner
+    rm resources_mcools.tar.gz
+
+    # these files will be copied after testing
+    mkdir /scripts
+    echo "Setting permissions for directories and script..."
+    chmod -R 755 /evaluator_container_apptainer /scripts
+
+# %runscript
+#     exec python3 /evaluator_container_apptainer/evaluator_API_clean_apptainer.py "$@"
+# 
+# %startscript
+#     exec python3 /evaluator_container_apptainer/evaluator_API_clean_apptainer.py "$@"
+
+%labels
+    Author "Satyam Priyadarshi"
+    Version "3.0"
+    Description "This container is the Evaluator set up for Genomic API for Model Evaluation using the DREAM-RNN model."
+
+%help
+    This container includes:
+    - Evaluator API script for genomic sequence evaluation.
+    - Installed Python dependencies required by the Evaluator.
+
+    Usage:
+    If you are building the caontainer using this definition file, ensure you have the following directory structure on the host:
+    ```
+    /path/to/DREAM_RNN/src/evaluator_container_apptainer/
+    ├── evaluator.def
+    ├── evaluator.sif
+    ├── evaluator_API_clean_apptainer.py
+    ├── evaluator_data/
+    └── predictions/
+    ```
+
+    Build the container (SIF)
+    ```
+    apptainer build evaluator.sif evaluator.def
+    ```
+
+    Bind these directories and run the container:
+    ```bash
+    apptainer run \
+      -B absolute/path/to/evaluator_data:/evaluator_data \
+      -B absolute/path/to/predictions:/predictions \
+      evaluator.sif PREDICTOR_HOST PREDICTOR_PORT /predictions
+    ```
+
+    Purpose:
+    - Facilitates genomic sequence evaluation by interacting with the Predictor container.
+    - Handles input/output through bound directories.
+
+    Example Command:
+    ```bash
+    apptainer run \
+      -B absolute/path/to/evaluator_data:/evaluator_data \
+      -B absolute/path/to/predictions:/predictions \
+      evaluator.sif 172.16.47.244 5000 /predictions
+    ```
+
+    Arguments:
+    1. `PREDICTOR_HOST`: IP address or hostname of the Predictor server.
+    2. `PREDICTOR_PORT`: Port number the Predictor is listening on.
+    3. `/predictions`: Path inside the container for storing output predictions.

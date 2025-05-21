@@ -1,0 +1,131 @@
+Bootstrap: docker
+From: python:3.13-slim
+Stage: build
+
+  
+
+%environment
+    # Prevent binding of host directories by default
+    export APPTAINER_NO_MOUNT="home,tmp,proc,sys,dev"
+    export LC_ALL=C
+    export PATH="/opt/conda/envs/orca_env/bin:$PATH"
+    export LD_LIBRARY_PATH="/opt/conda/envs/orca_env/lib:$LD_LIBRARY_PATH"
+    export GENOME_PATH='/orca/resources/'
+
+%post
+    #!/bin/bash
+    echo "Installing system dependencies..."
+    apt-get update && \
+    apt-get install -y --no-install-recommends git wget bzip2 ca-certificates && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+    echo "Installing Miniconda..."
+    mkdir -p /opt && \
+    wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p /opt/conda && \
+    rm -rf /tmp/miniconda.sh
+
+    # echo "Installing mamba..."
+    export PATH="/opt/conda/bin:$PATH"
+    # . /opt/conda/etc/profile.d/conda.sh
+    conda install -y -n base -c conda-forge mamba
+    . /opt/conda/etc/profile.d/mamba.sh
+    # eval "$(mamba shell hook --shell )"
+
+    echo "Getting orca repo..."
+    cd /
+    git clone https://github.com/jzhoulab/orca.git
+    cd orca
+
+    echo "Creating Conda environment 'orca_env'..."
+    # conda clean --all --yes
+    mamba env create -f orca_env_part1.yml -y
+    mamba activate orca_env
+
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+    mamba env update -f orca_env_part2.yml -y
+
+    git clone https://github.com/kathyxchen/selene.git
+    cd selene
+    git checkout custom_target_support
+    python setup.py build_ext --inplace
+    python setup.py install 
+
+    echo "Verifying Conda environment creation..."
+    if ! conda env list | grep -q orca_env; then
+        echo "Error: Conda environment 'orca' was not created successfully."
+        exit 1
+    fi
+
+    echo "getting model weights and hg38 reference genome"
+    cd /orca
+    wget https://zenodo.org/record/6234936/files/resources_core.tar.gz
+    tar -xf resources_core.tar.gz --no-same-owner
+    rm resources_core.tar.gz
+
+    # this will be copied after testing
+    mkdir /scripts 
+    echo "Setting permissions..."
+    chmod -R 755 /scripts /opt/conda
+    chmod +x /opt/conda/envs/orca_env/bin/python
+
+    # echo "Cleaning up temporary files..."
+    # rm -rf /dreamRNN_environment.yml
+    # conda clean --all --yes
+
+# %runscript
+#     export PATH="/opt/conda/envs/dream/bin:$PATH"
+#     exec python3 /predictor_container_apptainer/predictor_API_clean_apptainer.py "$@"
+# 
+# %startscript
+#     export PATH="/opt/conda/envs/dream/bin:$PATH"
+#     exec python3 /predictor_container_apptainer/predictor_API_clean_apptainer.py "$@"
+
+%labels
+    Author "Rui Guo"
+    Version "3.0"
+    Description "This container is the Predictor set up for Genomic API for Model Evaluation using the Orca model."
+
+%help
+    This container for Predictor includes:
+    - Predictor script for sequence processing and error handling.
+    - Integrated Orca model with its dependencies and orca_env conda environment.
+    - Support scripts like `api_preprocessing_utils.py`, `error_message_functions_updated.py`, and `predictor_help_message.json`.
+
+    Usage:
+    If you are building the container using this definition file, ensure you have the following directory structure on the host:
+    ```
+    /orca_predictor
+    ├── orca_predictor.def
+    ├── orca_predictor.sif
+    ├── orca_scripts
+    │   └── run_prediction.py
+    ```
+    
+    Build the container (SIF)
+    ```
+    apptainer build orca_predictor.sif orca_predictor.def
+    ```
+
+    Run the container
+    ```
+    apptainer run orca_predictor.sif HOST PORT
+    ```
+
+    Details:
+    - The container receives data via a TCP socket and doesn’t require mounted data directories.
+    - Replace `HOST` and `PORT` with the server and port configuration for the evaluator.
+
+    Purpose:
+    - Facilitates genomic model evaluation and prediction using the Orca framework.
+    - It is designed to seamlessly integrate with other tools via API endpoints.
+
+    Example Command:
+    ```
+    apptainer run predictor.sif 172.16.47.244 5000
+    ```
+
+    Arguments:
+    1. `HOST`: IP address or hostname of the Predictor server.
+    2. `PORT`: Port number the Predictor is listening on.

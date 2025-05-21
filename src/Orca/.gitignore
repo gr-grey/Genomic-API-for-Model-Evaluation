@@ -1,0 +1,6 @@
+__pycache__/
+
+*.sif
+
+predictions/*
+!predictions/.gitkeep
