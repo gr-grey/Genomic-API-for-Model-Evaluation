@@ -1,0 +1,17 @@
+{
+  "request": "predict",
+  "readout": "interaction_matrix",
+  "prediction_tasks": [
+    {
+      "name": "orca_chrom9_eval",
+      "type": "chromatin_conformation",
+      "cell_type": "H1",
+      "scale": "log",
+      "species": "homo_sapiens"
+    }
+  ],
+  "sequence_coordinates": {
+    "seq1": ["chr9", 0],
+    "seq2": ["chr9", 1000000]
+  }
+}
