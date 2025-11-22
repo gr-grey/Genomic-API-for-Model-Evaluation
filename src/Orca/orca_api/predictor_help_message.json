@@ -1,0 +1,12 @@
+{
+  "model": "Orca",
+  "version": "1.1",
+  "publication" : "Zhou, J. 2022",
+  "build_date": "Aug 1, 2025",
+  "features": ["chromatin_conformation"],
+  "cell_types" : ["H1-ESC"],
+  "species": ["homo_sapiens"],
+  "container_authors": "Grey Guo with edits from Ishika Luthra",
+  "model_authors": "Jian Zhou",
+  "input_size": 1000000
+}
